@@ -25,7 +25,7 @@ sudo apt-get install python3-numpy python3-pandas -y
 ```commandline
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
-git clone https://github.com/leonardonels/LQR_project.git
+git clone https://github.com/leonardonels/LQR_benchmark_project.git
 cd ~/ros2_ws/src/LQR_project
 git submodule update --init
 g++ -o build/knn cpp/kd_tree_nearest_point.cpp
