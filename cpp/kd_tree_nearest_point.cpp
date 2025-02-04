@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cmath>
 #include <limits>
+#include <string>
 #include "../nanoflann/include/nanoflann.hpp"
 
 
@@ -66,9 +67,9 @@ struct PointCloud {
     bool kdtree_get_bbox(BBOX& /*bb*/) const { return false; }
 };
 
-Odometry get_odometry()
+Odometry get_odometry(std::string odometry_csv)
 {
-    std::ifstream file("odometry/odometry.csv");
+    std::ifstream file(odometry_csv);
     if (!file) {
         std::cerr << "Error 1\n";
         return {};
@@ -78,7 +79,6 @@ Odometry get_odometry()
 
     while(std::getline(file, line))
     {
-        std::cout << "lettura!";
         std::stringstream ss(line);
         std::string x_str, y_str, yaw_str;
         std::getline(ss, x_str, ',');
@@ -96,9 +96,9 @@ Odometry get_odometry()
     return odometry;
 }
 
-PointCloud get_trajectory()
+PointCloud get_trajectory(std::string trajectory_csv)
 {
-    std::ifstream file("trajectories/trajectory_downsampled.csv");
+    std::ifstream file(trajectory_csv);
     std::string line;
     PointCloud cloud;
 
@@ -198,12 +198,20 @@ double get_angular_deviation(double angle1, double angle2) {
     return std::abs(diff);
 }
 
-int main() 
+int main(int argc, char* argv[]) 
 {
+    std::string odometry_csv = "odometry/odometry.csv";
+    std::string trajectory_csv = "trajectories/trajectory_downsampled.csv";
+    if (argc > 2) {
+        odometry_csv = argv[1];
+        trajectory_csv = argv[2];
+        std::cout << "[BENCHMARK]: Custom files loaded\n";
+    }
+
     // Get data as external inputs
-    Odometry odometry = get_odometry();
+    Odometry odometry = get_odometry(odometry_csv);
     Point odometry_pose = odometry.pose;
-    PointCloud cloud = get_trajectory();
+    PointCloud cloud = get_trajectory(trajectory_csv);
 
     // Find closest point to trajectory using KD-Tree from NanoFLANN
     size_t closest_point_index = get_closest_point(cloud, odometry_pose);
@@ -242,7 +250,6 @@ int main()
         }
     }
 
-
     std::cout << "Lateral deviation: " << lateral_deviation << std::endl;
     
     // At this point I have the closest point on the trajectory and the lateral deviation from the odometry to the trajectory
@@ -251,19 +258,19 @@ int main()
     // Compute for every point on the trajectory the tangent angle
     std::vector<double> points_tangents = get_tangent_angles(cloud.pts); 
     double closest_point_tangent = points_tangents[closest_point_index];
-
-    // Save the closest point on the trajectory and its tangent to a csv file for visualization
-    std::ofstream output("closest_point.csv");
-    output << "x,y,tangent\n" << closest_point.x << "," << closest_point.y << "," << closest_point_tangent << std::endl;
-    output.close();
-
+    
     std::cout << "odometry_pose: (" << odometry_pose.x << ", " << odometry_pose.y << ")" << std::endl;
     std::cout << "odometry yaw: " << odometry.yaw << std::endl;
     std::cout << "Closest point on trajectory: (" << closest_point.x << ", " << closest_point.y << ", " << closest_point_tangent << ")" << std::endl;
-
+    
     // Finally calculate the angular deviation between the odometry and the closest point on the trajectory
     double angular_deviation = get_angular_deviation(closest_point_tangent, odometry.yaw);
     std::cout << "Angular deviation: " << angular_deviation << std::endl;
+    
+    // Save the closest point on the trajectory and its tangent to a csv file for visualization
+    std::ofstream output("closest_point.csv");
+    output << "x,y,tangent,Lateral deviation,Angular deviation\n" << closest_point.x << "," << closest_point.y << "," << closest_point_tangent << "," << lateral_deviation << "," << angular_deviation << std::endl;
+    output.close();
 
     return 0;
 }
