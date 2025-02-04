@@ -1,6 +1,5 @@
 import subprocess
 import random
-import time
 import pandas as pd
 import numpy as np
 
@@ -33,19 +32,17 @@ try:
                                     "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
                                     }, index=[0])
         test_odometry.to_csv("odometry/test_odometry.csv", index=False)
-        start_time = time.time()
         subprocess.run(["build/knn",
                         "odometry/test_odometry.csv",
                         "trajectories/test_trajectory_downsampled.csv"
                         ], check=True)
-        end_time = time.time()
-        execution_time = end_time - start_time
-        execution_time_n.put(i,execution_time*1000)
-        print(f"[BENCHMARK]: {execution_time*1000} milliseconds to compute on test {i}")
+        execution_time=pd.read_csv("utils/time.csv")
+        execution_time_n.put(i,execution_time.iloc[0])
+        print(f"[BENCHMARK]: {execution_time_n[i]} milliseconds to compute on test {i}")
 
         if plot:
              subprocess.run(["python3",
-                            "print.py",
+                            "utils/print.py",
                             "--odometry", "odometry/test_odometry.csv",
                             "--trajectory", "trajectories/test_trajectory_downsampled.csv",
                             "--closest_point", "closest_point.csv"

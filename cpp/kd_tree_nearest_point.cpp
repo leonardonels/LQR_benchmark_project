@@ -6,6 +6,7 @@
 #include <cmath>
 #include <limits>
 #include <string>
+#include <chrono>
 #include "../nanoflann/include/nanoflann.hpp"
 
 
@@ -213,6 +214,9 @@ int main(int argc, char* argv[])
     Point odometry_pose = odometry.pose;
     PointCloud cloud = get_trajectory(trajectory_csv);
 
+    // Save the actual time to compute the time needed for the execution later
+    auto start = std::chrono::high_resolution_clock::now();
+
     // Find closest point to trajectory using KD-Tree from NanoFLANN
     size_t closest_point_index = get_closest_point(cloud, odometry_pose);
     Point closest_point = cloud.pts[closest_point_index];
@@ -250,7 +254,6 @@ int main(int argc, char* argv[])
         }
     }
 
-    std::cout << "Lateral deviation: " << lateral_deviation << std::endl;
     
     // At this point I have the closest point on the trajectory and the lateral deviation from the odometry to the trajectory
     // Now I need to find the angular deviation between the odometry and the trajectory
@@ -258,7 +261,13 @@ int main(int argc, char* argv[])
     // Compute for every point on the trajectory the tangent angle
     std::vector<double> points_tangents = get_tangent_angles(cloud.pts); 
     double closest_point_tangent = points_tangents[closest_point_index];
+
+    // Compute the time required for the execution
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    double time_taken = duration.count() / 1000.0;
     
+    std::cout << "Lateral deviation: " << lateral_deviation << std::endl;
     std::cout << "odometry_pose: (" << odometry_pose.x << ", " << odometry_pose.y << ")" << std::endl;
     std::cout << "odometry yaw: " << odometry.yaw << std::endl;
     std::cout << "Closest point on trajectory: (" << closest_point.x << ", " << closest_point.y << ", " << closest_point_tangent << ")" << std::endl;
@@ -267,6 +276,12 @@ int main(int argc, char* argv[])
     double angular_deviation = get_angular_deviation(closest_point_tangent, odometry.yaw);
     std::cout << "Angular deviation: " << angular_deviation << std::endl;
     
+    // Print and save the time required for the execution
+    std::cout << "[Time]: " << time_taken << " milliseconds" << std::endl;
+    std::ofstream time("utils/time.csv");
+    time << "milliseconds\n" << time_taken << std::endl;
+    time.close();
+
     // Save the closest point on the trajectory and its tangent to a csv file for visualization
     std::ofstream output("closest_point.csv");
     output << "x,y,tangent,Lateral deviation,Angular deviation\n" << closest_point.x << "," << closest_point.y << "," << closest_point_tangent << "," << lateral_deviation << "," << angular_deviation << std::endl;
