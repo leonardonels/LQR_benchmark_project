@@ -5,7 +5,7 @@
 #include <sstream>
 #include <cmath>
 #include <limits>
-#include "nanoflann/include/nanoflann.hpp"
+#include "../nanoflann/include/nanoflann.hpp"
 
 
 struct Point {
@@ -24,6 +24,18 @@ struct Waypoint {
 
 Point subtract(const Point &a, const Point &b) {
     return {a.x - b.x, a.y - b.y};
+}
+
+// Overload dell'operatore << per Point
+std::ostream& operator<<(std::ostream& os, const Point& p) {
+    os << "(" << p.x << ", " << p.y << ")";
+    return os;
+}
+
+// Overload dell'operatore << per Odometry
+std::ostream& operator<<(std::ostream& os, const Odometry& odom) {
+    os << "Pose: " << odom.pose << ", Yaw: " << odom.yaw;
+    return os;
 }
 
 // Computes the Euclidean distance between two points
@@ -56,12 +68,17 @@ struct PointCloud {
 
 Odometry get_odometry()
 {
-    std::ifstream file("odometry.csv");
+    std::ifstream file("odometry/odometry.csv");
+    if (!file) {
+        std::cerr << "Error 1\n";
+        return {};
+    }
     std::string line;
     Odometry odometry;
 
     while(std::getline(file, line))
     {
+        std::cout << "lettura!";
         std::stringstream ss(line);
         std::string x_str, y_str, yaw_str;
         std::getline(ss, x_str, ',');
@@ -81,7 +98,7 @@ Odometry get_odometry()
 
 PointCloud get_trajectory()
 {
-    std::ifstream file("trajectory_downsampled.csv");
+    std::ifstream file("trajectories/trajectory_downsampled.csv");
     std::string line;
     PointCloud cloud;
 
