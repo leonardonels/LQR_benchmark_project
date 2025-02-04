@@ -1,6 +1,3 @@
-git submodule add https://github.com/jlblancoc/nanoflann.git
-
-
 <div align="center">
     <h1>LQR_project</h1>
 </div>
