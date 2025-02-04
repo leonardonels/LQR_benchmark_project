@@ -28,12 +28,12 @@ trajectory["y"]*=random.uniform(trj_min_y,trj_max_y)
 trajectory.to_csv("trajectories/test_trajectory_downsampled.csv", index=False)
 try:    
     for i in range(n):
-        start_time = time.time()
         test_odometry=pd.DataFrame({"x":random.uniform(odo_min_x,odo_max_x),
                                     "y":random.uniform(odo_min_y,odo_max_y),
                                     "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
                                     }, index=[0])
         test_odometry.to_csv("odometry/test_odometry.csv", index=False)
+        start_time = time.time()
         subprocess.run(["build/knn",
                         "odometry/test_odometry.csv",
                         "trajectories/test_trajectory_downsampled.csv"
@@ -50,7 +50,7 @@ try:
                             "--trajectory", "trajectories/test_trajectory_downsampled.csv",
                             "--closest_point", "closest_point.csv"
                             ], check=True)
-        print(f"[BENCHMARK]: {execution_time_n.mean()} milliseconds to compute on average")
+    print(f"[BENCHMARK]: {execution_time_n.mean()} milliseconds to compute on average")
 
 except KeyboardInterrupt:
         pass
