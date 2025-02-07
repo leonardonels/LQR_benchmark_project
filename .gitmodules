@@ -1,3 +1,6 @@
 [submodule "nanoflann"]
 	path = nanoflann
 	url = https://github.com/jlblancoc/nanoflann.git
+[submodule "annoy"]
+	path = annoy
+	url = https://github.com/spotify/annoy.git
