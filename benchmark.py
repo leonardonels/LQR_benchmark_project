@@ -6,7 +6,7 @@ import numpy as np
 ################ params ################
 
 n=10    #number ofexecutions
-build = "build/knn"
+build = "build/nanoflann"
 trj_min_x=1.0
 trj_max_x=10.0
 trj_min_y=1.0
