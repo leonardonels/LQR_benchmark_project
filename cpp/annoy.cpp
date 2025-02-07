@@ -185,12 +185,22 @@ int main(int argc, char* argv[]) {
     std::vector<double> points_tangents = get_tangent_angles(cloud.pts);
     double closest_point_tangent = points_tangents[closest_point_index];
 
+    double angular_deviation = get_angular_deviation(closest_point_tangent, odometry.yaw);
+
     auto end = std::chrono::high_resolution_clock::now();
     double time_taken = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000.0;
+    
+    std::cout << "[ANNOY]: Angular deviation: " << angular_deviation << std::endl;
+    std::cout << "[ANNOY]: Lateral deviation: " << lateral_deviation << std::endl;
+    
+    std::cout << "[ANNOY]: odometry_pose: (" << odometry_pose.x << ", " << odometry_pose.y << ")" << std::endl;
+    std::cout << "[ANNOY]: odometry yaw: " << odometry.yaw << std::endl;
+    std::cout << "[ANNOY]: Closest point on trajectory: (" << closest_point.x << ", " << closest_point.y << ", " << closest_point_tangent << ")" << std::endl;
+    std::cout << "[ANNOY]: " << time_taken << " milliseconds" << std::endl;
 
-    std::cout << "Lateral deviation: " << lateral_deviation << std::endl;
-    std::cout << "Angular deviation: " << get_angular_deviation(closest_point_tangent, odometry.yaw) << std::endl;
-    std::cout << "[Time]: " << time_taken << " milliseconds" << std::endl;
+    std::ofstream output("closest_point.csv");
+    output << "x,y,tangent,Lateral deviation,Angular deviation\n" << closest_point.x << "," << closest_point.y << "," << closest_point_tangent << "," << lateral_deviation << "," << angular_deviation << std::endl;
+    output.close();
 
     return 0;
 }
