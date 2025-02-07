@@ -28,5 +28,9 @@ cd ~/ros2_ws/src
 git clone https://github.com/leonardonels/LQR_benchmark_project.git
 cd ~/ros2_ws/src/LQR_benchmark_project
 git submodule update --init
-g++ -o build/knn cpp/kd_tree_nearest_point.cpp
+g++ -o build/nanoflann cpp/kd_tree_nearest_point.cpp
+g++ -o build/annoy cpp/annoy.cpp
+```
+```commandline
+python3 benchmark.py
 ```
