@@ -28,7 +28,6 @@ def sample(sample_scaling_min, sample_scaling_max, trj_min_x,trj_max_x, trj_min_
     sample_scaling_max=(min(sample_scaling_max, trajectory.shape[0]))
     #trajectory=trajectory.sample(int(random.uniform(sample_scaling_min, sample_scaling_max)), axis=0)
     trajectory=trajectory.iloc[::int(random.uniform(sample_scaling_min, sample_scaling_max))]
-    print(trajectory.shape[0])
     trajectory["x"]*=random.uniform(trj_min_x,trj_max_x)
     trajectory["y"]*=random.uniform(trj_min_y,trj_max_y)
     trajectory.to_csv("trajectories/test_trajectory_downsampled.csv", index=False)
