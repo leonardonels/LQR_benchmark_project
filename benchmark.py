@@ -5,7 +5,7 @@ import numpy as np
 
 ################ params ################
 
-n=1000    # number ofexecutions
+n=10    # number ofexecutions
 build = "nanoflann" # nanoflann | annoy
 sample_scaling_min=1
 sample_scaling_max=10
@@ -19,7 +19,7 @@ odo_min_y=-5.0
 odo_max_y=5.0
 odo_min_yaw=0.0
 odo_max_yaw=6.28
-plot=False
+plot=True
 
 ########################################
 
