@@ -5,8 +5,8 @@ import numpy as np
 
 class Benchmark:
     algs = ("annoy", "nanoflann")
-    n = 100  # number of executions
-    plot = False
+    n = 10  # number of executions
+    plot = True
 
     sample_scaling_min = 1
     sample_scaling_max = 10
