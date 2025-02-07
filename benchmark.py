@@ -19,7 +19,7 @@ odo_min_y=-5.0
 odo_max_y=5.0
 odo_min_yaw=0.0
 odo_max_yaw=6.28
-plot=False
+plot=True
 
 ########################################
 
@@ -35,14 +35,14 @@ def sample(sample_scaling_min, sample_scaling_max, trj_min_x,trj_max_x, trj_min_
 execution_time_arr=np.ndarray((len(algs),n))
 try:
     for i in range(n):
+        sample(sample_scaling_min, sample_scaling_max, trj_min_x,trj_max_x, trj_min_y,trj_max_y)
+        test_odometry=pd.DataFrame({"x":random.uniform(odo_min_x,odo_max_x),
+                                    "y":random.uniform(odo_min_y,odo_max_y),
+                                    "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
+                                    }, index=[0])
         for j in range(len(algs)):
             print(f"\n ===== {i} : {algs[j]} =====\n")
             build="build/" + algs[j]
-            sample(sample_scaling_min, sample_scaling_max, trj_min_x,trj_max_x, trj_min_y,trj_max_y)
-            test_odometry=pd.DataFrame({"x":random.uniform(odo_min_x,odo_max_x),
-                                        "y":random.uniform(odo_min_y,odo_max_y),
-                                        "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
-                                        }, index=[0])
             test_odometry.to_csv("odometry/test_odometry.csv", index=False)
             subprocess.run([build,
                             "odometry/test_odometry.csv",
