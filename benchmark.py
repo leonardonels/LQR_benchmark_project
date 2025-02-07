@@ -6,6 +6,7 @@ import numpy as np
 ################ params ################
 
 n=10    #number ofexecutions
+build = "build/knn"
 trj_min_x=1.0
 trj_max_x=10.0
 trj_min_y=1.0
@@ -32,7 +33,7 @@ try:
                                     "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
                                     }, index=[0])
         test_odometry.to_csv("odometry/test_odometry.csv", index=False)
-        subprocess.run(["build/knn",
+        subprocess.run([build,
                         "odometry/test_odometry.csv",
                         "trajectories/test_trajectory_downsampled.csv"
                         ], check=True)
