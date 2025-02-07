@@ -7,6 +7,8 @@ import numpy as np
 
 n=10    # number ofexecutions
 build = "nanoflann" # nanoflann | annoy
+sample_scaling_min=1
+sample_scaling_max=10
 trj_min_x=1.0
 trj_max_x=10.0
 trj_min_y=1.0
@@ -21,14 +23,21 @@ plot=True
 
 ########################################
 
+def sample(sample_scaling_min, sample_scaling_max, trj_min_x,trj_max_x, trj_min_y,trj_max_y):
+    trajectory=pd.read_csv("trajectories/cart_race_track_trajectory.csv")
+    sample_scaling_max=(min(sample_scaling_max, trajectory.shape[0]))
+    #trajectory=trajectory.sample(int(random.uniform(sample_scaling_min, sample_scaling_max)), axis=0)
+    trajectory=trajectory.iloc[::int(random.uniform(sample_scaling_min, sample_scaling_max))]
+    print(trajectory.shape[0])
+    trajectory["x"]*=random.uniform(trj_min_x,trj_max_x)
+    trajectory["y"]*=random.uniform(trj_min_y,trj_max_y)
+    trajectory.to_csv("trajectories/test_trajectory_downsampled.csv", index=False)
+
 execution_time_n=np.ndarray(n)
-trajectory=pd.read_csv("trajectories/trajectory_downsampled.csv")
-trajectory["x"]*=random.uniform(trj_min_x,trj_max_x)
-trajectory["y"]*=random.uniform(trj_min_y,trj_max_y)
-trajectory.to_csv("trajectories/test_trajectory_downsampled.csv", index=False)
 build="build/"+build
 try:    
     for i in range(n):
+        sample(sample_scaling_min, sample_scaling_max, trj_min_x,trj_max_x, trj_min_y,trj_max_y)
         test_odometry=pd.DataFrame({"x":random.uniform(odo_min_x,odo_max_x),
                                     "y":random.uniform(odo_min_y,odo_max_y),
                                     "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
