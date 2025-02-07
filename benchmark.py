@@ -40,10 +40,10 @@ try:
                                     "y":random.uniform(odo_min_y,odo_max_y),
                                     "yaw":random.uniform(odo_min_yaw,odo_max_yaw)
                                     }, index=[0])
+        test_odometry.to_csv("odometry/test_odometry.csv", index=False)
         for j in range(len(algs)):
             print(f"\n ===== {i} : {algs[j]} =====\n")
             build="build/" + algs[j]
-            test_odometry.to_csv("odometry/test_odometry.csv", index=False)
             subprocess.run([build,
                             "odometry/test_odometry.csv",
                             "trajectories/test_trajectory_downsampled.csv"
