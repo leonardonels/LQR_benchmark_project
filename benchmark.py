@@ -6,7 +6,7 @@ import numpy as np
 ################ params ################
 
 n=10    #number ofexecutions
-build = "build/nanoflann"
+build = "annoy"
 trj_min_x=1.0
 trj_max_x=10.0
 trj_min_y=1.0
@@ -26,6 +26,7 @@ trajectory=pd.read_csv("trajectories/trajectory_downsampled.csv")
 trajectory["x"]*=random.uniform(trj_min_x,trj_max_x)
 trajectory["y"]*=random.uniform(trj_min_y,trj_max_y)
 trajectory.to_csv("trajectories/test_trajectory_downsampled.csv", index=False)
+build="build/"+build
 try:    
     for i in range(n):
         test_odometry=pd.DataFrame({"x":random.uniform(odo_min_x,odo_max_x),
