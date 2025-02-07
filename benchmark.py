@@ -2,8 +2,6 @@ import subprocess
 import random
 import pandas as pd
 import numpy as np
-import yaml
-import os
 
 class Benchmark:
     algs = ("annoy", "nanoflann")
