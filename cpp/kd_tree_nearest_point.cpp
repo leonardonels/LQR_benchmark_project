@@ -262,14 +262,14 @@ int main(int argc, char* argv[])
     std::vector<double> points_tangents = get_tangent_angles(cloud.pts); 
     double closest_point_tangent = points_tangents[closest_point_index];
 
-    // Finally calculate the angular deviation between the odometry and the closest point on the trajectory
-    double angular_deviation = get_angular_deviation(closest_point_tangent, odometry.yaw);
-    std::cout << "[NANOFLANN]: Angular deviation: " << angular_deviation << std::endl;
-
     // Compute the time required for the execution
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
     double time_taken = duration.count() / 1000.0;
+
+    // Finally calculate the angular deviation between the odometry and the closest point on the trajectory
+    double angular_deviation = get_angular_deviation(closest_point_tangent, odometry.yaw);
+    std::cout << "[NANOFLANN]: Angular deviation: " << angular_deviation << std::endl;
     
     std::cout << "[NANOFLANN]: Lateral deviation: " << lateral_deviation << std::endl;
     std::cout << "[NANOFLANN]: odometry_pose: (" << odometry_pose.x << ", " << odometry_pose.y << ")" << std::endl;
