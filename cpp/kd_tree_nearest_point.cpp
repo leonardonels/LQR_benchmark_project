@@ -283,7 +283,7 @@ int main(int argc, char* argv[])
     time.close();
 
     // Save the closest point on the trajectory and its tangent to a csv file for visualization
-    std::ofstream output("closest_point.csv");
+    std::ofstream output("utils/closest_point.csv");
     output << "x,y,tangent,Lateral deviation,Angular deviation\n" << closest_point.x << "," << closest_point.y << "," << closest_point_tangent << "," << lateral_deviation << "," << angular_deviation << std::endl;
     output.close();
 

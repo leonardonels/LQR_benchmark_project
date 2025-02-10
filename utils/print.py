@@ -18,7 +18,7 @@ def main():
                            default='trajectories/trajectory_downsampled.csv',
                            help='Path to trajectory.csv')
         parser.add_argument('--closest_point', type=str, 
-                           default='closest_point.csv',
+                           default='utils/closest_point.csv',
                            help='Path to closest_point.csv')
         
         args = parser.parse_args()

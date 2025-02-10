@@ -198,7 +198,7 @@ int main(int argc, char* argv[]) {
     std::cout << "[ANNOY]: Closest point on trajectory: (" << closest_point.x << ", " << closest_point.y << ", " << closest_point_tangent << ")" << std::endl;
     std::cout << "[ANNOY]: " << time_taken << " milliseconds" << std::endl;
 
-    std::ofstream output("closest_point.csv");
+    std::ofstream output("utils/closest_point.csv");
     output << "x,y,tangent,Lateral deviation,Angular deviation\n" << closest_point.x << "," << closest_point.y << "," << closest_point_tangent << "," << lateral_deviation << "," << angular_deviation << std::endl;
     output.close();
 

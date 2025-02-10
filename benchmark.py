@@ -62,7 +62,7 @@ class Benchmark:
                                         "utils/print.py",
                                         "--odometry", "odometry/test_odometry.csv",
                                         "--trajectory", "trajectories/test_trajectory_downsampled.csv",
-                                        "--closest_point", "closest_point.csv"
+                                        "--closest_point", "utils/closest_point.csv"
                                         ], check=True)
             execution_time_means = execution_time_arr.mean(axis=1)
             print('\n')
