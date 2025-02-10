@@ -9,11 +9,11 @@
 * nanoflann fold in which **should** be cloned the nanoflan repo
 * odometry folder for odometry csv files
 * trajectories folder for trajectories csv files
-* closest_point.csv file in which the closest point found is saved for future plotting
 * benchmark.py file to use to make algorithms testing easier
 * utils folder for additional files and functions like
     * print.py file used to plot the closest point found alongside the trajectory used and the odometry 
     * time.csv a simple but effective file used to save the execution time
+    * closest_point.csv file in which the closest point found is saved for future plotting
 
 ## :package: Prerequisite packages
 > What we need are pandas and numpy.
