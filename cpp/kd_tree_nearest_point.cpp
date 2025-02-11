@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -196,7 +195,8 @@ double get_angular_deviation(double angle1, double angle2) {
     diff -= M_PI;
     
     // Return the absolute value to get the magnitude in [0, π]
-    return std::abs(diff);
+    //return std::abs(diff);
+    return diff;
 }
 
 int main(int argc, char* argv[]) 

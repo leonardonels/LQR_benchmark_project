@@ -26,7 +26,7 @@ class Benchmark:
 
 
     def sample(self):
-        trajectory = pd.read_csv("trajectories/cart_race_track_trajectory.csv")
+        trajectory = pd.read_csv("trajectories/cart_race_track_trajectory_right.csv")
         sample_scaling_max = min(self.sample_scaling_max, trajectory.shape[0])
         trajectory = trajectory.iloc[::int(random.uniform(self.sample_scaling_min, sample_scaling_max))]
         trajectory["x"] *= random.uniform(self.trj_min_x, self.trj_max_x)

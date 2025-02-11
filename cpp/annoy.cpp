@@ -108,7 +108,7 @@ size_t get_closest_point(PointCloud& cloud, Point odometry_pose) {
         tree.add_item(i, data);
     }
 
-    tree.build(10);  // Crea l'albero con 10 alberi per la ricerca approssimata
+    tree.build(2);  // Crea l'albero con 10 alberi per la ricerca approssimata
 
     // Punto di query
     double query_point[2] = {odometry_pose.x, odometry_pose.y};
@@ -159,7 +159,8 @@ double get_angular_deviation(double angle1, double angle2) {
     if (diff < 0)
         diff += 2 * M_PI;
     diff -= M_PI;
-    return std::abs(diff);
+    //return std::abs(diff);
+    return diff;
 }
 
 int main(int argc, char* argv[]) {
