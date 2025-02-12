@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 class Benchmark:
-    algs = ("annoy", "nanoflann")
+    algs = ("nanoflann",) #("annoy", "nanoflann")
     n = 10  # number of executions
     plot = True
 
@@ -21,8 +21,8 @@ class Benchmark:
     odo_max_x = 10.0
     odo_min_y = -5.0
     odo_max_y = 5.0
-    odo_min_yaw = 0.0
-    odo_max_yaw = 6.28
+    odo_min_yaw = -3.14
+    odo_max_yaw = 3.14
 
 
     def sample(self):
@@ -51,7 +51,7 @@ class Benchmark:
                 for j in range(len(self.algs)):
                     print(f"\n ===== {i} : {self.algs[j]} =====\n")
                     build = "build/" + self.algs[j]
-                    subprocess.run([build,
+                    res=subprocess.run([build,
                                     "odometry/test_odometry.csv",
                                     "trajectories/test_trajectory_downsampled.csv"
                                     ], check=True)

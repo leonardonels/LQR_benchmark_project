@@ -8,6 +8,15 @@
 #include <chrono>
 #include "../nanoflann/include/nanoflann.hpp"
 
+#define PI 3.14159265358979323846
+
+struct Vector {
+    double x, y;
+};
+
+struct Vector3 {
+    double x, y, z;
+};
 
 struct Point {
     double x, y;
@@ -44,6 +53,25 @@ double distance(const Point &a, const Point &b) {
     double dx = a.x - b.x;
     double dy = a.y - b.y;
     return std::sqrt(dx * dx + dy * dy);
+}
+
+Vector3 crossProduct(const Vector3& A, const Vector3& B) {
+    return { 
+        0, 
+        0, 
+        A.x * B.y - A.y * B.x
+    };
+}
+
+double signed_distance(double Ax, double Ay, double Bx, double By, double theta) {
+    
+    Vector3 A = { cos(theta), sin(theta), 0 };
+    
+    Vector3 B = { Bx - Ax, By - Ay, 0 };
+    
+    Vector3 cross = crossProduct(A, B);
+    
+    return cross.z;
 }
 
 // Normalizes a vector (point)
@@ -140,7 +168,6 @@ size_t get_closest_point(PointCloud cloud, Point odometry_pose)
     return nearest_index;
 }
 
-
 std::vector<double> get_tangent_angles(std::vector<Point> points)
 {
 
@@ -178,7 +205,6 @@ std::vector<double> get_tangent_angles(std::vector<Point> points)
 
     return tangent_angles;
 }
-
 
 double get_angular_deviation(double angle1, double angle2) {
     // Compute the raw difference, then shift by π.
@@ -261,6 +287,14 @@ int main(int argc, char* argv[])
     // Compute for every point on the trajectory the tangent angle
     std::vector<double> points_tangents = get_tangent_angles(cloud.pts); 
     double closest_point_tangent = points_tangents[closest_point_index];
+
+    double debug = signed_distance(closest_point.x, closest_point.y, odometry_pose.x, odometry_pose.y, closest_point_tangent);
+    if(debug<0)
+    {
+        std::cout << "[NANOFLANN]: Position: right\n";
+    }else{
+        std::cout << "[NANOFLANN]: Position: left\n";
+    }
 
     // Compute the time required for the execution
     auto end = std::chrono::high_resolution_clock::now();
