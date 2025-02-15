@@ -8,6 +8,7 @@ class Benchmark:
     n = 10  # number of executions
     plot = True
 
+    uniform_sampler_probability = 0.7
     sample_scaling_min = 1
     sample_scaling_max = 10
     oversample_factor = 1
@@ -24,11 +25,16 @@ class Benchmark:
     odo_min_yaw = -3.14
     odo_max_yaw = 3.14
 
+    def decision(self, probability):
+        return random.random() < probability
 
     def sample(self):
         trajectory = pd.read_csv("trajectories/cart_race_track_trajectory_right.csv")
         sample_scaling_max = min(self.sample_scaling_max, trajectory.shape[0])
-        trajectory = trajectory.iloc[::int(random.uniform(self.sample_scaling_min, sample_scaling_max))]
+        if self.decision(self.uniform_sampler_probability):
+            trajectory = trajectory.iloc[::int(random.uniform(self.sample_scaling_min, sample_scaling_max))]
+        else:
+            trajectory = trajectory.sample(n=int(trajectory.shape[0]/random.randint(self.sample_scaling_min, sample_scaling_max)), axis=0).sort_index()
         trajectory["x"] *= random.uniform(self.trj_min_x, self.trj_max_x)
         trajectory["y"] *= random.uniform(self.trj_min_y, self.trj_max_y)
         trajectory.to_csv("trajectories/test_trajectory_downsampled.csv", index=False)
