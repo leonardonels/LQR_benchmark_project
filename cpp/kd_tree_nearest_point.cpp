@@ -71,7 +71,7 @@ double signed_distance(double Ax, double Ay, double Bx, double By, double theta)
     
     Vector3 cross = crossProduct(A, B);
     
-    return cross.z;
+    return cross.z/std::abs(cross.z);
 }
 
 // Normalizes a vector (point)
@@ -288,13 +288,8 @@ int main(int argc, char* argv[])
     std::vector<double> points_tangents = get_tangent_angles(cloud.pts); 
     double closest_point_tangent = points_tangents[closest_point_index];
 
-    double debug = signed_distance(closest_point.x, closest_point.y, odometry_pose.x, odometry_pose.y, closest_point_tangent);
-    if(debug<0)
-    {
-        std::cout << "[NANOFLANN]: Position: right\n";
-    }else{
-        std::cout << "[NANOFLANN]: Position: left\n";
-    }
+    double lateral_position = signed_distance(closest_point.x, closest_point.y, odometry_pose.x, odometry_pose.y, closest_point_tangent);
+    lateral_deviation*=lateral_position;
 
     // Compute the time required for the execution
     auto end = std::chrono::high_resolution_clock::now();
